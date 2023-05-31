@@ -57,7 +57,6 @@ const CptCodeDropdown = () => {
 						width: "100%",
 					}}
 					placeholder="Please select CPT Code"
-					defaultValue={""}
 					onChange={handleCptCodeChange}
 					options={options}
 				/>
