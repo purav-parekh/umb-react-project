@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Select, Space } from "antd";
+import CostForm from "../new-cost-form/index";
 
-function CptCodeDropdown() {
+const CptCodeDropdown = () => {
 	const [cptCodes, setCptCodes] = useState([]);
 	const [selectedCptCode, setSelectedCptCode] = useState("");
 	const [averageCost, setAverageCost] = useState(null);
+	const [showForm, setShowForm] = useState(false);
 
 	useEffect(() => {
 		// Fetch CPT codes from API
@@ -28,6 +30,7 @@ function CptCodeDropdown() {
 
 	const handleCptCodeChange = (event) => {
 		setSelectedCptCode(event);
+		setShowForm(true);
 		console.log(event);
 		// Fetch average cost for selected CPT code from API
 		fetch(`http://localhost:3001/api/costs/`)
@@ -43,6 +46,39 @@ function CptCodeDropdown() {
 			});
 	};
 
+	// const handleFormSubmit = (event) => {
+	// 	event.preventDefault();
+
+	// 	// Perform API request to post the new cost
+	// 	fetch(`http://localhost:3001/api/cptCodes/${selectedCptCode}/costs`, {
+	// 		method: "POST",
+	// 		headers: {
+	// 			"Content-Type": "application/json",
+	// 		},
+	// 		body: JSON.stringify({
+	// 			cost: parseFloat(cost),
+	// 			facilityType,
+	// 			copay,
+	// 		}),
+	// 	})
+	// 		.then((response) => response.json())
+	// 		.then((data) => {
+	// 			// Handle successful response
+	// 			console.log("New cost posted:", data);
+	// 			// Reset the cost input field
+	// 			setCost("");
+	// 		})
+	// 		.catch((error) => {
+	// 			// Handle error
+	// 			console.error("Error posting new cost:", error);
+	// 		});
+
+	// 	// Reset form state
+	// 	setSelectedCptCode("");
+	// 	setAverageCost(null);
+	// 	setShowForm(false);
+	// };
+
 	return (
 		<div>
 			<Space
@@ -51,7 +87,6 @@ function CptCodeDropdown() {
 				}}
 				direction="vertical">
 				<Select
-					allowClear
 					style={{
 						width: "100%",
 					}}
@@ -67,8 +102,9 @@ function CptCodeDropdown() {
 					<p>Average Cost: ${averageCost}</p>
 				</div>
 			)}
+			{showForm && <CostForm selectedCptCode={selectedCptCode} />}
 		</div>
 	);
-}
+};
 
 export default CptCodeDropdown;
