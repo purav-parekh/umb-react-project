@@ -2,19 +2,19 @@ import React from "react";
 import { Button, Form, Input } from "antd";
 import PropTypes from "prop-types";
 
-const CostForm = ({ selectedCptCode }) => {
+const CostForm = ({ selectedCptCode, fn }) => {
+	const [form] = Form.useForm();
 	const handleFormSubmit = (values) => {
 		const { cost, facilityType, copay } = values;
-		// event.preventDefault();
-		console.log(values);
 
 		// Perform API request to post the new cost
-		fetch(`http://localhost:3001/api/cptCodes/${selectedCptCode}/costs`, {
+		fetch(`http://localhost:3001/api/costs`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({
+				cptCodeId: selectedCptCode,
 				cost: parseFloat(cost),
 				facilityType,
 				copay: parseFloat(copay),
@@ -23,6 +23,8 @@ const CostForm = ({ selectedCptCode }) => {
 			.then((response) => response.json())
 			.then((data) => {
 				console.log("New cost posted:", data);
+				fn(selectedCptCode);
+				form.resetFields();
 			})
 			.catch((error) => {
 				// Handle error
@@ -35,6 +37,7 @@ const CostForm = ({ selectedCptCode }) => {
 	};
 	return (
 		<Form
+			form={form}
 			onFinish={handleFormSubmit}
 			name="basic"
 			labelCol={{
@@ -102,6 +105,7 @@ const CostForm = ({ selectedCptCode }) => {
 
 CostForm.propTypes = {
 	selectedCptCode: PropTypes.number.isRequired,
+	fn: PropTypes.func.isRequired,
 };
 
 export default CostForm;

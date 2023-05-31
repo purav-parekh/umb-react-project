@@ -31,7 +31,6 @@ const CptCodeDropdown = () => {
 	const handleCptCodeChange = (event) => {
 		setSelectedCptCode(event);
 		setShowForm(true);
-		console.log(event);
 		// Fetch average cost for selected CPT code from API
 		fetch(`http://localhost:3001/api/costs/`)
 			.then((response) => response.json())
@@ -46,39 +45,6 @@ const CptCodeDropdown = () => {
 			});
 	};
 
-	// const handleFormSubmit = (event) => {
-	// 	event.preventDefault();
-
-	// 	// Perform API request to post the new cost
-	// 	fetch(`http://localhost:3001/api/cptCodes/${selectedCptCode}/costs`, {
-	// 		method: "POST",
-	// 		headers: {
-	// 			"Content-Type": "application/json",
-	// 		},
-	// 		body: JSON.stringify({
-	// 			cost: parseFloat(cost),
-	// 			facilityType,
-	// 			copay,
-	// 		}),
-	// 	})
-	// 		.then((response) => response.json())
-	// 		.then((data) => {
-	// 			// Handle successful response
-	// 			console.log("New cost posted:", data);
-	// 			// Reset the cost input field
-	// 			setCost("");
-	// 		})
-	// 		.catch((error) => {
-	// 			// Handle error
-	// 			console.error("Error posting new cost:", error);
-	// 		});
-
-	// 	// Reset form state
-	// 	setSelectedCptCode("");
-	// 	setAverageCost(null);
-	// 	setShowForm(false);
-	// };
-
 	return (
 		<div>
 			<Space
@@ -91,7 +57,7 @@ const CptCodeDropdown = () => {
 						width: "100%",
 					}}
 					placeholder="Please select CPT Code"
-					defaultValue={[]}
+					defaultValue={""}
 					onChange={handleCptCodeChange}
 					options={options}
 				/>
@@ -102,7 +68,7 @@ const CptCodeDropdown = () => {
 					<p>Average Cost: ${averageCost}</p>
 				</div>
 			)}
-			{showForm && <CostForm selectedCptCode={selectedCptCode} />}
+			{showForm && <CostForm selectedCptCode={selectedCptCode} fn={handleCptCodeChange} />}
 		</div>
 	);
 };
